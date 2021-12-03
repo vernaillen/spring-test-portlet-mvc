@@ -7,6 +7,7 @@ import java.util.List;
 import org.springframework.beans.factory.support.RootBeanDefinition;
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.annotation.AnnotationConfigUtils;
+import org.springframework.core.convert.ConversionService;
 import org.springframework.util.Assert;
 import org.springframework.util.ObjectUtils;
 import org.springframework.validation.Validator;
@@ -23,6 +24,8 @@ public class StandalonePortletMockMvcBuilder extends DefaultPortletMockMvcBuilde
 	private Validator validator;
 	
 	private List<HandlerInterceptor> interceptors = new ArrayList<HandlerInterceptor>();
+
+	private ConversionService conversionService;
 	
 	public StandalonePortletMockMvcBuilder(Object... controllers) {
 		Assert.isTrue(!ObjectUtils.isEmpty(controllers), "At least one controller is required");
@@ -38,31 +41,39 @@ public class StandalonePortletMockMvcBuilder extends DefaultPortletMockMvcBuilde
 		this.interceptors.addAll(Arrays.asList(interceptors));
 		return this;
 	}
-	
+
+	public StandalonePortletMockMvcBuilder setConversionService(ConversionService conversionService) {
+		this.conversionService = conversionService;
+		return this;
+	}
+
 	protected ApplicationContext initApplicationContext() {
 		GenericWebApplicationContext wac = new GenericWebApplicationContext();
-		
+
 		addControllers(wac);
 		addHandlerInterceptors(wac);
-		
-		// TODO: add inteceptors here
+
 		RootBeanDefinition mappingDef = new RootBeanDefinition(DefaultAnnotationHandlerMapping.class);
 		mappingDef.getPropertyValues().add("interceptors", interceptors);
 		wac.registerBeanDefinition("handlerMapping", mappingDef);
-		
-		// TODO: add validator here
+
 		RootBeanDefinition adapterDef = new RootBeanDefinition(AnnotationMethodHandlerAdapter.class);
-		
-		if (validator != null) {
+
+		if (this.validator != null || this.conversionService != null) {
 			ConfigurableWebBindingInitializer webBindingInitializer = new ConfigurableWebBindingInitializer();
-			webBindingInitializer.setValidator(validator);
+			if (this.validator != null) {
+				webBindingInitializer.setValidator(this.validator);
+			}
+			if (this.conversionService != null) {
+				webBindingInitializer.setConversionService(this.conversionService);
+			}
 			adapterDef.getPropertyValues().add("webBindingInitializer", webBindingInitializer);
 		}
-		
+
 		wac.registerBeanDefinition("handlerAdapter", adapterDef);
-		
+
 		AnnotationConfigUtils.registerAnnotationConfigProcessors(wac);
-		
+
 		wac.refresh();
 
 		return wac;
