@@ -1,12 +1,12 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
 	<modelVersion>4.0.0</modelVersion>
-	<groupId>com.github.markusf</groupId>
+	<groupId>com.github.vernaillen</groupId>
 	<artifactId>spring-test-portlet-mvc</artifactId>
 	<description>Client and Server-Side Spring Portlet MVC Test Support</description>
-	<version>0.1.2-SNAPSHOT</version>
+	<version>0.1.3-SNAPSHOT</version>
 	<name>${project.groupId}:${project.artifactId}</name>
-	<url>https://github.com/markusf/spring-test-portlet-mvc</url>
+	<url>https://github.com/vernaillen/spring-test-portlet-mvc</url>
 	<licenses>
 		<license>
 			<name>The Apache License, Version 2.0</name>
@@ -24,6 +24,10 @@
 			<email>markus.feindler@gmx.de</email>
 			<organization>markus.feindler</organization>
 			<organizationUrl>https://github.com/markusf</organizationUrl>
+		</developer>
+		<developer>
+			<name>Wouter Vernaillen</name>
+			<organizationUrl>https://github.com/vernaillen</organizationUrl>
 		</developer>
 	</developers>
 
